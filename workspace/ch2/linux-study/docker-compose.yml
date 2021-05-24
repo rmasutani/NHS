@@ -5,3 +5,5 @@ services:
     tty: true
     volumes:
       - .:/linux-study
+    ports:
+      - "8000:8000"
