@@ -1,0 +1,10 @@
+FROM node:14.15.4
+
+RUN apt-get update
+RUN apt-get install -y locales
+RUN locale-gen ja_JP.UTF-8
+RUN localedef -f UTF-8 -i ja_JP ja_JP
+RUN apt-get install -y vim curl tmux
+ENV LANG ja_JP.UTF-8
+ENV TZ Asia/Tokyo
+WORKDIR /nodejs-study
