@@ -1,7 +1,15 @@
 "use strict";
 const http = require("http");
+const auth = require("http-auth");
+const basic = auth.basic(
+  { realm: "Enquetes Area." },
+  (username, password, callback) => {
+    callback(username == "guest" && password === "xaXZJQmE");
+  }
+);
+
 const server = http
-  .createServer((req, res) => {
+  .createServer(basic, (req, res) => {
     // Logging
     const now = new Date();
     console.info("[" + now + "] Requested by " + req.socket.remoteAddress);
