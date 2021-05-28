@@ -1,5 +1,6 @@
 "use strict";
 const pug = require("pug");
+const contents = [];
 
 function handle(req, res) {
   switch (req.method) {
@@ -21,6 +22,8 @@ function handle(req, res) {
           const decoded = decodeURIComponent(body);
           const params = new URLSearchParams(decoded);
           const content = params.get("content");
+          contents.push(chunk);
+          console.log("[" + new Date() + "]" + "Post saved!!");
           console.log("Your post: " + content);
           handleRedirectPosts(req, res);
         });
