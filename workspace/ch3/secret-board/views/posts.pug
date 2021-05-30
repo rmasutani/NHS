@@ -2,7 +2,7 @@ doctype html
 html(lang="ja")
     head 
         meta(charset="UTF-8")
-        title  Secret discussion borad
+        title  Secret discussion board 
     body 
         h1 Secret Discussion Board
         a(href="/logout") Log out  
@@ -11,4 +11,10 @@ html(lang="ja")
             div
                 textarea(name="content", cols="40", rows="4")
             div
-                button(type="submit")  Post  
+                button(type="submit")  Post
+                
+        h2 Posts 
+        each post in posts 
+            p #{post.content}
+            p #{post.createdAt}
+            hr

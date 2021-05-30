@@ -1,6 +1,7 @@
 "use strict";
 const pug = require("pug");
-const contents = [];
+const util = require("./handler-util");
+const Post = require("./post");
 
 function handle(req, res) {
   switch (req.method) {
@@ -8,7 +9,9 @@ function handle(req, res) {
       res.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8",
       });
-      res.end(pug.renderFile("./views/posts.pug"));
+      Post.findAll().then((posts) => {
+        res.end(pug.renderFile("./views/posts.pug", { posts }));
+      });
       break;
     case "POST":
       // POSTの処理
@@ -22,11 +25,19 @@ function handle(req, res) {
           const decoded = decodeURIComponent(body);
           const params = new URLSearchParams(decoded);
           const content = params.get("content");
-          contents.push(chunk);
-          console.log("[" + new Date() + "]" + "Post saved!!");
-          console.log("Your post: " + content);
-          handleRedirectPosts(req, res);
+          console.log("[" + new Date() + "]" + "Post saved: " + content);
+
+          Post.create({
+            content,
+            trackingCookie: null,
+            postedBy: req.user,
+          }).then(() => {
+            handleRedirectPosts(req, res);
+          });
         });
+      break;
+    case "PUT":
+      util.handleBadRequest(req, res);
       break;
     default:
       break;
