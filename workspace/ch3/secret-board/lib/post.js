@@ -6,14 +6,13 @@ const sequelize = new Sequelize(
     logging: false,
   }
 );
-
 const Post = sequelize.define(
   "Post",
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true, // データを入れる際に自動で1増加してくれる
-      primaryKey: true, // 固有であるかのチェック
+      autoIncrement: true,
+      primaryKey: true,
     },
     content: {
       type: DataTypes.TEXT,

@@ -16,7 +16,7 @@ function handle(req, res) {
         "Content-Type": "text/html; charset=utf-8",
       });
       Post.findAll().then((posts) => {
-        res.end(pug.renderFile("./views/posts.pug", { posts }));
+        res.end(pug.renderFile("./views/posts.pug", { posts, user: req.user }));
         console.info(
           `閲覧されました: user: ${req.user}, ` +
             `trackingId: ${cookies.get(trackingIdKey)},` +
@@ -73,6 +73,37 @@ function handleRedirectPosts(req, res) {
   res.end();
 }
 
+function handleDelete(req, res) {
+  console.log("handleDelete is called");
+  switch (req.method) {
+    case "POST":
+      let body = [];
+      req
+        .on("data", (chunk) => {
+          body.push(chunk);
+        })
+        .on("end", () => {
+          body = Buffer.concat(body).toString();
+          const decoded = decodeURIComponent(body);
+          const params = new URLSearchParams(decoded);
+          const id = params.get("id");
+          Post.findByPk(id).then((post) => {
+            // console.info("posted by: " + post.postedBy);
+            if (req.user === post.postedBy) {
+              post.destroy().then(() => {
+                handleRedirectPosts(req, res);
+              });
+            }
+          });
+        });
+      break;
+    default:
+      util.handleBadRequest(req, res);
+      break;
+  }
+}
+
 module.exports = {
   handle,
+  handleDelete,
 };

@@ -1,21 +1,25 @@
 doctype html
 html(lang="ja")
-    head 
-        meta(charset="UTF-8")
-        title  Secret discussion board 
-    body 
-        h1 Secret Discussion Board
-        a(href="/logout") Log out  
-        h2 New Post
-        form(method="post" action="/posts")
-            div
-                textarea(name="content", cols="40", rows="4")
-            div
-                button(type="submit")  Post
-                
-        h2 Posts 
-        each post in posts 
-            h3 #{post.id} : ID: #{post.trackingCookie}
-            p #{post.content}
-            p #{post.createdAt}
-            hr
+  head
+    meta(charset="UTF-8")
+    title 秘密の匿名掲示板
+  body
+    h1 秘密の匿名掲示板
+    a(href="/logout") ログアウト
+    h2 新規投稿
+    form(method="post" action="/posts")
+      div
+        textarea(name="content" cols=40 rows=4)
+      div
+        button(type="submit") 投稿
+    h2 投稿一覧
+    each post in posts
+      h3 #{post.id} : ID:#{post.trackingCookie}
+      p #{post.content}
+      p 投稿日時: #{post.createdAt}
+      - let isDeletable = (user === post.postedBy)
+      if isDeletable
+        form(method="post" action="/posts?delete=1")
+          input(type="hidden" name="id" value=post.id)
+          button(type="submit") 削除
+      hr

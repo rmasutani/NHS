@@ -4,7 +4,7 @@ const auth = require("http-auth");
 const router = require("./lib/router");
 
 const basic = auth.basic({
-  realm: "Enter usename and passowod",
+  realm: "Enter username and password.",
   file: "./users.htpasswd",
 });
 
@@ -13,13 +13,13 @@ const server = http
     router.route(req, res);
   })
   .on("error", (e) => {
-    console.error("Server error", e);
+    console.error("Server Error", e);
   })
   .on("clientError", (e) => {
-    console.error("Client Error");
+    console.error("Client Error", e);
   });
 
 const port = 8000;
 server.listen(port, () => {
-  console.info("listening on " + port);
+  console.info("Listening on " + port);
 });
