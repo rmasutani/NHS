@@ -16,6 +16,9 @@ function handle(req, res) {
         "Content-Type": "text/html; charset=utf-8",
       });
       Post.findAll().then((posts) => {
+        posts.forEach((post) => {
+          post.content = post.content.replace(/\n/g, "<br>");
+        });
         res.end(pug.renderFile("./views/posts.pug", { posts, user: req.user }));
         console.info(
           `閲覧されました: user: ${req.user}, ` +
@@ -89,12 +92,17 @@ function handleDelete(req, res) {
           const id = params.get("id");
           Post.findByPk(id).then((post) => {
             // console.info("posted by: " + post.postedBy);
-            if (req.user === post.postedBy) {
+            if (req.user === post.postedBy || req.user === "admin") {
               post.destroy().then(() => {
                 handleRedirectPosts(req, res);
               });
             }
           });
+          console.info(
+            `削除されました: user: ${req.user}, ` +
+              `remoteAddress: ${req.socket.remoteAddress}, ` +
+              `userAgent: ${req.headers["user-agent"]} `
+          );
         });
       break;
     default:
