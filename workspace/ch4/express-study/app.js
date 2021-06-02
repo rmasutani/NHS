@@ -1,25 +1,17 @@
 "use strict";
-
-const debug = require("debug");
-const debugInfo = debug("module:info");
-setInterval(() => {
-  debugInfo("some information");
-}, 1000);
-const debugError = debug("module:error");
-setInterval(() => {
-  debugError("some error");
-}, 1000);
-
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var helmet = require("helmet");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var photosRouter = require("./routes/photos");
 
 var app = express();
+app.use(helmet());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -33,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/photos", photosRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
