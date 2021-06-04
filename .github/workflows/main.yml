@@ -1,10 +1,8 @@
-
 name: Damage Calculation Test
 
 on:
   push:
-    branches: [ main ]
-
+    branches: [main]
 
 jobs:
   build:
@@ -16,21 +14,31 @@ jobs:
       - name: Use Node.js v14.15.4
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15.4'
-      
+          node-version: "14.15.4"
+
       - run: ls
       - name: Install dependencies
         working-directory: ./workspace/ch4/damage-calc
         run: yarn install
-        
+
       - name: Check directory
         working-directory: ./workspace/ch4/damage-calc
         run: ls
-        
+
       - name: Install dependencies
         working-directory: ./workspace/ch4/damage-calc
         run: yarn install
-      - name: Run test
+
+      - name: Install JUnit coverage reporter
         working-directory: ./workspace/ch4/damage-calc
-        run: yarn test
-      
+        run: yarn add --dev jest-unit
+
+      - name: Run tests with JUnit as reporter
+        working-directory: ./workspace/ch4/damage-calc
+        run: npx jest --ci --runInBand --reporters=default --reporters=jest-junit
+        env:
+          JEST_UNIT_OUTPUT_DIR: "./junit/test-results.xml"
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./junit/test-results.xml
+        if: always()
