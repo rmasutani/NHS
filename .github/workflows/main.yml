@@ -20,10 +20,17 @@ jobs:
       
       - run: ls
       - name: Install dependencies
-        run: yarn install
         working-directory: ./workspace/ch4/damage-calc
-      - run: cd workspace/ch4/damage-calc
-      - run: ls
-      - run: yarn install
-      - run: yarn test
+        run: yarn install
+        
+      - name: Check directory
+        working-directory: ./workspace/ch4/damage-calc
+        run: ls
+        
+      - name: Install dependencies
+        working-directory: ./workspace/ch4/damage-calc
+        run: yarn install
+      - name: Run test
+        working-directory: ./workspace/ch4/damage-calc
+        run: yarn test
       
