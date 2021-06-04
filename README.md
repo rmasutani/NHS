@@ -1,0 +1,1 @@
+[![Damage Calculation Test](https://github.com/rmasutani/NHS/actions/workflows/main.yml/badge.svg)](https://github.com/rmasutani/NHS/actions/workflows/main.yml)
