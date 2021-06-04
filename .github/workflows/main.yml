@@ -19,6 +19,9 @@ jobs:
           node-version: '14.15.4'
       
       - run: ls
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ./workspace/ch4/damage-calc
       - run: cd workspace/ch4/damage-calc/
       - run: yarn install
       - run: yarn test
