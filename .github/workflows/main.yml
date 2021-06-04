@@ -31,7 +31,7 @@ jobs:
 
       - name: Install JUnit coverage reporter
         working-directory: ./workspace/ch4/damage-calc
-        run: yarn add --dev jest-unit
+        run: yarn add --dev jest-junit
 
       - name: Run tests with JUnit as reporter
         working-directory: ./workspace/ch4/damage-calc
