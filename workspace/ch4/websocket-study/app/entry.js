@@ -17,10 +17,16 @@ movingButton.click(() => {
 
 const loadavg = $("#loadavg");
 
-// AJAX通信を行うクライアントJavaScript
 // setInterval(() => {
-//   // GETメソッドで/server-statusにデータを渡さずにアクセス
-//   $.get("/server-status", {}, (data) => {
-//     loadavg.text(data.loadavg.toString()); // JSONでもJSと同じ方法でプロパティを取得できる
+//   $.get('/server-status', {}, (data) => {
+//     loadavg.text(data.loadavg.toString());
 //   });
 // }, 10);
+
+// AJAX の時には 10 ミリ秒というポーリング間隔は、クライアント側に設定
+// WebSocket のイベントの発行間隔に関しては、サーバー上の Node.js のコードに記述
+import io from "socket.io-client";
+const socket = io("http://localhost:8000");
+socket.on("server-status", (data) => {
+  loadavg.text(data.loadavg.toString());
+});

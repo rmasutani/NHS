@@ -5,7 +5,7 @@
  */
 
 var app = require("../app");
-var debug = require("debug")("ajax-study:server");
+var debug = require("debug")("websocket-study:server");
 var http = require("http");
 
 /**
@@ -84,3 +84,18 @@ function onListening() {
   var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
 }
+
+var io = require("socket.io")(server);
+var os = require("os");
+
+// server-status という名前で定義されるイベントを、 WebSocket の接続に対して発行する実装
+function emitServerStatus(socket) {
+  socket.emit("server-status", { loadavg: os.loadavg() });
+  console.log("server-status event emitted.");
+}
+
+// WebSoocket の接続が確立した時に、 setInterval 関数を利用して、
+// 10 ミリ秒ごとに emitServerStatus 関数を呼び出すように設定
+io.on("connection", function (socket) {
+  setInterval(emitServerStatus, 10, socket);
+});
